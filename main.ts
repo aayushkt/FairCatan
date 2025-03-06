@@ -1,18 +1,32 @@
 class Player {
 
   name: string;
-  Resources: { [ResourceType: string]: number} = { };
-  Settlements: number[];
-  Cities: number[];
-  Roads: number[];
+  resources: { [ResourceType: string]: number} = { };
+  settlements: number[];
+  cities: number[];
+  roads: number[];
 
   constructor(name: string) {
     this.name = name;
     for (let item in Resource) {
-      this.Resources[item] = 0;  
+      if (item == Resource.Desert) continue;
+      this.resources[item] = 0;  
     }
   }
 
+}
+
+class Port {
+
+}
+
+class Board {
+  // the length of the longest row of tiles
+  // default board size is 5
+  size: number;
+  ports: { [Location: number] : Port };
+  tileValues: number[];
+  tiles: Resource[];
 }
 
 enum Resource {
@@ -21,6 +35,7 @@ enum Resource {
   Ore="Ore",
   Grain="Grain",
   Wool="Wool",
+  Desert="Desert"
 }
 
 
@@ -29,16 +44,16 @@ enum Resource {
   //   return user.age >= 18;
   // }
   
-  var me = new Player("test")
+  var me = new Player("test");
 
   const me2 = {
     name: "testing",
-    Resources: { "Brick" : 23 },
-    Settlements: [],
-    Cities: [],
-    Roads: []
-  } satisfies Player
+    resources: { "Brick" : 23 },
+    settlements: [],
+    cities: [],
+    roads: []
+  } satisfies Player;
 
-  console.log(me.Resources[Resource.Brick])
-  me.Resources[Resource.Brick]++;
-  console.log(me.Resources[Resource.Brick])
+  console.log(me.resources[Resource.Brick]);
+  me.resources[Resource.Brick]++;
+  console.log(me.resources[Resource.Brick]);
