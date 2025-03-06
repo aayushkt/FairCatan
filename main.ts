@@ -16,7 +16,7 @@ class Player {
 
 }
 
-class Port {
+class Harbor {
 
 }
 
@@ -24,7 +24,7 @@ class Board {
   // the length of the longest row of tiles
   // default board size is 5
   size: number;
-  ports: { [Location: number] : Port };
+  harbors: { [Location: number] : Harbor };
   tileValues: number[];
   tiles: Resource[];
 }
