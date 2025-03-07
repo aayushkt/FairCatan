@@ -1,18 +1,20 @@
-class Harbor {
+export class Harbor {
 
 }
 
-class Board {
+export class Board {
   harbors: { [Location: number] : Harbor };
   tileValues: number[];
   tileResources: Resource[];
 
   constructor() {
     this.generateTileResourcesRandomly();
-    this.generateTileValuesRandomly();
+    this.generateTileValuesAccordingToAlphabet();
   }
 
   private generateTileResourcesRandomly() {
+
+    this.tileResources = [];
 
     // default catan board contains:
 
@@ -52,21 +54,34 @@ class Board {
   }
 
   private generateTileValuesAccordingToAlphabet() {
-    // note: this is the values in their alphabetical-spiral order 
+    // note: this is the values in their (reverse) alphabetical-spiral order 
     // that corresponds to the official rule book (not the "Variable Setup")
-    this.tileValues = [5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4, 5, 6, 3, 11];
+    this.tileValues = [];
+    let orderedValues = [11, 3, 6, 5, 4, 9, 10, 8, 4, 11, 12, 9, 10, 8, 3, 6, 2, 5];
+    for (let i = 0; i < 19; ++i) {
+      if (this.tileResources[i] == Resource.Desert) {
+        this.tileValues.push(0);
+        continue;
+      }
+      const temp = orderedValues.pop();
+      if (temp == undefined) {
+        this.tileValues.push(0);
+      } else {
+        this.tileValues.push(temp);
+      }
+    }
   }
 
   private generateTileValuesRandomly() {
     let allValues = [2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12];
     this.shuffle(allValues);
-    for (let i = 0; i < 19; ++i) {
-      if (this.tileResources[i] == Resource.Desert) {
-        this.tileValues.push(0);
-      } else {
-        this.tileValues.pop();
-      }
-    }
+    // for (let i = 0; i < 19; ++i) {
+    //   if (this.tileResources[i] == Resource.Desert) {
+    //     this.tileValues.push(0);
+    //   } else {
+    //     this.tileValues.push(allValues.pop());
+    //   }
+    // }
 
     // TODO: no two red numbers (6s or 8s) should be adjacent
   }
@@ -88,7 +103,7 @@ class Board {
   }
 }
 
-enum Resource {
+export enum Resource {
   Brick="Brick",
   Lumber="Lumber",
   Ore="Ore",

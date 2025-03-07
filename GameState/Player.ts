@@ -1,4 +1,6 @@
-class Player {
+import { Resource } from './Board.ts';
+
+export class Player {
 
     name: string;
     resources: { [ResourceType: string]: number} = { };

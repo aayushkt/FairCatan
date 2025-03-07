@@ -1,4 +1,7 @@
-class GameState {
+import { Board } from './Board.ts'
+import { Player } from './Player.ts'
+
+export class GameState {
     
     players: Player[];
     board: Board;
