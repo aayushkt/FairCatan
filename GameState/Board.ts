@@ -1,3 +1,5 @@
+import { shuffle } from './../utils.ts';
+
 export class Harbor {
 
 }
@@ -50,7 +52,7 @@ export class Board {
     this.tileResources.push(Resource.Desert);
 
     // shuffle them all up and place them
-    this.shuffle(this.tileResources);
+    shuffle(this.tileResources);
   }
 
   private generateTileValuesAccordingToAlphabet() {
@@ -74,7 +76,7 @@ export class Board {
 
   private generateTileValuesRandomly() {
     let allValues = [2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12];
-    this.shuffle(allValues);
+    shuffle(allValues);
     // for (let i = 0; i < 19; ++i) {
     //   if (this.tileResources[i] == Resource.Desert) {
     //     this.tileValues.push(0);
@@ -86,21 +88,6 @@ export class Board {
     // TODO: no two red numbers (6s or 8s) should be adjacent
   }
 
-  private shuffle(array) {
-    let currentIndex = array.length;
-  
-    // While there remain elements to shuffle...
-    while (currentIndex != 0) {
-  
-      // Pick a remaining element...
-      let randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-  
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
-    }
-  }
 }
 
 export enum Resource {
