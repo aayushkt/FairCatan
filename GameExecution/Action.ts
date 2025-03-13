@@ -1,5 +1,13 @@
-import { GameState } from '../GameState/GameState.ts'
+import { GameState } from '../GameState/GameState';
+import { UpdateStateAfterRunningAction } from './GameRunner';
 
-export interface Action {
-    run(gameState: GameState): void
+export abstract class Action {
+
+    public Run(gameState: GameState) {
+        this.Run(gameState);
+        UpdateStateAfterRunningAction(gameState);
+    }
+
+    protected abstract RunAction(gameState: GameState): void;
+    
 }
