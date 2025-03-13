@@ -1,4 +1,4 @@
-import { Resource } from './Board.ts';
+import { Resource } from './Board';
 
 export class Player {
 

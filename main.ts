@@ -1,8 +1,11 @@
 
-  import { Player } from './GameState/Player.ts';
-  import { Board, Resource } from './GameState/Board.ts';
-  import { GameState } from './GameState/GameState.ts';
-  import { CalculatePossibleActions } from './GameExecution/GameRunner.ts';
+
+  // download tsx from npm and run: npx tsx main.ts
+
+  import { Player } from './GameState/Player';
+  import { Board, Resource } from './GameState/Board';
+  import { GameState } from './GameState/GameState';
+  import { CalculatePossibleActions } from './GameExecution/GameRunner';
 
   // function isAdult(user: User): boolean {
   //   return user.age >= 18;

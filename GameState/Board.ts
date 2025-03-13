@@ -1,4 +1,4 @@
-import { shuffle } from '../utils.ts';
+import { shuffle } from '../utils';
 
 export class Harbor {
 

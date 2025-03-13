@@ -1,6 +1,6 @@
 import { Action } from './Action';
-import { GameState } from '../GameState/GameState.ts';
-import { Player } from '../GameState/Player.ts';
+import { GameState } from '../GameState/GameState';
+import { Player } from '../GameState/Player';
 
 export function CalculatePossibleActions(gameState: GameState) {
 
