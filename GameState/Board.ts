@@ -9,8 +9,10 @@ export class Board {
   harbors: { [Location: number] : Harbor };
   tileValues: number[];
   tileResources: Resource[];
+  private width: number;
 
   constructor() {
+    this.width = 5; // standard catan board is 5 hex tiles across
     this.tileResources = this.generateTileResourcesRandomly();
     this.tileValues = this.generateTileValuesAccordingToAlphabet(this.tileResources);
   }
@@ -79,6 +81,8 @@ export class Board {
     return tileValues;
   }
 
+  // this function assumes the board shape is a regular hexagon,
+  // with width given by the board.width property
   public GetNeighborsOfVertex(vertex: number): number[] {
     if (vertex < 0 || vertex > 53) return [];
 
