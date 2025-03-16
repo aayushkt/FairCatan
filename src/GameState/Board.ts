@@ -81,25 +81,142 @@ export class Board {
     return tileValues;
   }
 
-  // this function assumes the board shape is a regular hexagon,
-  // with width given by the board.width property
   public GetNeighborsOfVertex(vertex: number): number[] {
-    if (vertex < 0 || vertex > 53) return [];
+    // check CatanReferences/CatanBoardVerticesAnnotated.png to see which
+    // vertices neighbor each other
+    switch(vertex) {
 
-    // see CatanBoardVerticesAnnotated.png for a clear diagram
-    // on how this algorithm works and to understand the terms used here
+      case 0: return [3, 4];
+      case 1: return [4, 5];
+      case 2: return [5, 6];
+      case 3: return [0, 7];
+      case 4: return [0, 1, 8];
+      case 5: return [1, 2, 9];
+      case 6: return [2, 10];
+      case 7: return [3, 11, 12];
+      case 8: return [4, 12, 13];
+      case 9: return [5, 13, 14];
 
-    // first, find out the row number of the vertex
+      case 10: return [6, 14, 15];
+      case 11: return [7, 16];
+      case 12: return [7, 8, 17];
+      case 13: return [8, 9, 18];
+      case 14: return [9, 10, 19];
+      case 15: return [10, 20];
+      case 16: return [11, 21, 22];
+      case 17: return [12, 22, 23];
+      case 18: return [13, 23, 24];
+      case 19: return [14, 24, 25];
+
+      case 20: return [15, 25, 26];
+      case 21: return [16, 27];
+      case 22: return [16, 17, 28];
+      case 23: return [17, 18, 29];
+      case 24: return [18, 19, 30];
+      case 25: return [19, 20, 31];
+      case 26: return [20, 32];
+      case 27: return [21, 33];
+      case 28: return [22, 33, 34];
+      case 29: return [23, 34, 35];
+
+      case 30: return [24, 35, 36];
+      case 31: return [25, 36, 37];
+      case 32: return [26, 37];
+      case 33: return [27, 28, 38];
+      case 34: return [28, 29, 39];
+      case 35: return [29, 30, 40];
+      case 36: return [30, 31, 41];
+      case 37: return [31, 32, 42];
+      case 38: return [33, 43];
+      case 39: return [34, 43, 44];
+
+      case 40: return [35, 44, 45];
+      case 41: return [36, 45, 46];
+      case 42: return [37, 46];
+      case 43: return [38, 39, 47];
+      case 44: return [39, 40, 49];
+      case 45: return [40, 41, 51];
+      case 46: return [41, 42, 53];
+      case 47: return [43, 51];
+      case 48: return [44, 51, 52];
+      case 49: return [45, 52, 53];
+
+      case 50: return [46, 53];
+      case 51: return [47, 48];
+      case 52: return [48, 49];
+      case 53: return [49, 50];
     
-    // then find the position in the row (the column)
+      default: return[];
+    }
+  }
 
-    // its three neighbors will be on the other side of the row (upper/lower)
-    // in the same position and position + 1
+  public GetTilesOfVertex(vertex: number): number[] {
+    // check CatanReferences/CatanBoardVerticesAnnotated.png to see which
+    // vertices neighbor each other
+    switch(vertex) {
 
-    // also check for edge cases (if the vertex is on the left edge it wont)
-    // have three neighbors
+      case 0: return [0];
+      case 1: return [1];
+      case 2: return [2];
+      case 3: return [0];
+      case 4: return [0, 1];
+      case 5: return [1, 2];
+      case 6: return [2];
+      case 7: return [0, 3];
+      case 8: return [0, 1, 4];
+      case 9: return [1, 2, 5];
 
-    return [];
+      case 10: return [2, 6];
+      case 11: return [3];
+      case 12: return [0, 3, 4];
+      case 13: return [1, 4, 5];
+      case 14: return [2, 5, 6];
+      case 15: return [6];
+      case 16: return [3, 7];
+      case 17: return [3, 4, 8];
+      case 18: return [4, 5, 9];
+      case 19: return [5, 6, 10];
+
+      case 20: return [6, 11];
+      case 21: return [7];
+      case 22: return [3, 7, 8];
+      case 23: return [4, 8, 9];
+      case 24: return [5, 9, 10];
+      case 25: return [6, 10, 11];
+      case 26: return [11];
+      case 27: return [7];
+      case 28: return [7, 8, 12];
+      case 29: return [8, 9, 13];
+
+      case 30: return [9, 10, 14];
+      case 31: return [10, 11, 15];
+      case 32: return [11];
+      case 33: return [7, 12];
+      case 34: return [8, 12, 13];
+      case 35: return [9, 13, 14];
+      case 36: return [10, 14, 15];
+      case 37: return [11, 15];
+      case 38: return [12];
+      case 39: return [12, 13, 16];
+
+      case 40: return [13, 14, 17];
+      case 41: return [14, 15, 18];
+      case 42: return [15];
+      case 43: return [12, 16];
+      case 44: return [13, 16, 17];
+      case 45: return [14, 17, 18];
+      case 46: return [15, 18];
+      case 47: return [16];
+      case 48: return [16, 17];
+      case 49: return [17, 18];
+
+      case 50: return [18];
+      case 51: return [16];
+      case 52: return [17];
+      case 53: return [18];
+    
+      default: return[];
+    }
   }
 
 }
