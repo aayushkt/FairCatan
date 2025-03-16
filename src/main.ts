@@ -1,6 +1,6 @@
 
 
-  // download tsx from npm and run: npx tsx main.ts
+  // download tsx from npm and run: npx tsx src/main.ts
 
   import { Player } from './GameState/Player';
   import { Board, Resource } from './GameState/Board';
