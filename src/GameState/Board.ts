@@ -146,7 +146,7 @@ export class Board {
       case 52: return [48, 49];
       case 53: return [49, 50];
     
-      default: return[];
+      default: throw `ERROR: CANNOT FIND NEIGHBORS OF VERTEX ${vertex}, IT DOES NOT EXIST`;
     }
   }
 
@@ -215,7 +215,32 @@ export class Board {
       case 52: return [17];
       case 53: return [18];
     
-      default: return[];
+      default: throw `ERROR: CANNOT FIND TILES OF VERTEX ${vertex}, IT DOES NOT EXIST`;
+    }
+  }
+
+  public GetVerticesOfTile(tile: number): number[] {
+    switch (tile) {
+      case 0: return [0, 3, 4, 7, 8, 12];
+      case 1: return [1, 4, 5, 8, 9, 13];
+      case 2: return [2, 5, 6, 9, 10, 14];
+      case 3: return [7, 11, 12, 16, 17, 22];
+      case 4: return [8, 12, 13, 17, 18, 23];
+      case 5: return [9, 13, 14, 18, 19, 24];
+      case 6: return [10, 14, 15, 19, 20, 25];
+      case 7: return [16, 21, 22, 27, 28, 33];
+      case 8: return [17, 22, 23, 28, 29, 34];
+      case 9: return [18, 23, 24, 29, 30, 35];
+      case 10: return [19, 24, 25, 30, 31, 36];
+      case 11: return [20, 25, 26, 31, 32, 37];
+      case 12: return [28, 33, 34, 38, 39, 43];
+      case 13: return [29, 34, 35, 39, 40, 44];
+      case 14: return [30, 35, 36, 40, 41, 45];
+      case 15: return [31, 36, 37, 41, 42, 46];
+      case 16: return [39, 43, 44, 47, 48, 51];
+      case 17: return [40, 44, 45, 48, 49, 52];
+      case 18: return [41, 45, 46, 49, 50, 53];
+      default: throw `ERROR: CANNOT FIND VERTICES OF TILE ${tile}, IT DOES NOT EXIST`;
     }
   }
 
