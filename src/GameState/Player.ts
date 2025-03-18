@@ -4,9 +4,9 @@ export class Player {
 
     name: string;
     resources: { [ResourceType: string]: number} = { };
-    settlements: number[];
-    cities: number[];
-    roads: number[];
+    settlements: number[] = [];
+    cities: number[] = [];
+    roads: number[] = [];
   
     constructor(name: string) {
       this.name = name;
