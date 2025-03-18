@@ -1,4 +1,6 @@
+import { Resource } from '../GameState/Board';
 import { GameState } from '../GameState/GameState';
+import { ProbabilityOfRollingValue } from '../utils';
 import { UpdateStateAfterRunningAction } from './GameRunner';
 
 export abstract class Action {
@@ -21,7 +23,10 @@ export function RollDice(gamestate: GameState) {
             for (let tileIndex = 0; tileIndex < tilesForSettlement.length; ++tileIndex) {
                 const tile = tilesForSettlement[tileIndex];
                 const resource = gamestate.board.tileResources[tile];
-                player.resources[resource] += gamestate.board.RollProbability(gamestate.board.tileValues[tile]);
+                if (resource != Resource.Desert) {
+                    //console.log(`Player ${player.name} Got ${resource} amt: ${gamestate.board.RollProbability(gamestate.board.tileValues[tile])}`)
+                    player.resources[resource] += ProbabilityOfRollingValue(gamestate.board.tileValues[tile]);
+                }
             }
         }
     }

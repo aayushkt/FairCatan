@@ -1,39 +1,13 @@
-
-
   // download tsx from npm and run: npx tsx src/main.ts
 
   import { Player } from './GameState/Player';
   import { Board, Resource } from './GameState/Board';
   import { GameState } from './GameState/GameState';
   import { CalculatePossibleActions } from './GameExecution/GameRunner';
-
-  // function isAdult(user: User): boolean {
-  //   return user.age >= 18;
-  // }
-
-  var me = new Player("test");
-
-  const me2 = {
-    name: "testing",
-    resources: { "Brick" : 23 },
-    settlements: [],
-    cities: [],
-    roads: []
-  } satisfies Player;
-
-  // console.log(me.resources[Resource.Brick]);
-  me.resources[Resource.Brick]++;
-  // console.log(me.resources[Resource.Brick]);
-
-
-  let b = new Board();
-  console.log(b.tileResources);
-  console.log(b.tileValues);
-
-
-  // example of what a game might look like
+  import { RollDice } from './GameExecution/Action';
 
   let g = new GameState();
+
   g.addPlayer("Alice");
   g.addPlayer("Bob");
   g.addPlayer("Charlie");

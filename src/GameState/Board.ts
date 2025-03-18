@@ -1,20 +1,24 @@
 import { shuffle } from '../utils';
 
 export class Harbor {
-
+  locations: number[];
+  harborType: Resource; // a desert resource represents a 3:1 harbor of any type
+  constructor(locations: number[], harborType: Resource) {
+    this.locations = locations;
+    this.harborType = harborType;
+  }
 }
 
 export class Board {
 
-  harbors: { [Location: number] : Harbor };
+  harbors: Harbor[]; // a desert resource represents a 3:1 harbor of any type
   tileValues: number[];
   tileResources: Resource[];
-  private width: number;
 
   constructor() {
-    this.width = 5; // standard catan board is 5 hex tiles across
     this.tileResources = this.generateTileResourcesRandomly();
     this.tileValues = this.generateTileValuesAccordingToAlphabet(this.tileResources);
+    this.setupHarbors();
   }
 
   private generateTileResourcesRandomly(): Resource[] {
@@ -244,20 +248,32 @@ export class Board {
     }
   }
 
-  public RollProbability(tileValue: number): number {
-    switch (tileValue) {
-      case 2: return 1/36;
-      case 3: return 2/36;
-      case 4: return 3/36;
-      case 5: return 4/36;
-      case 6: return 5/36;
-      case 7: return 0;
-      case 8: return 5/36;
-      case 9: return 4/36;
-      case 10: return 3/36;
-      case 11: return 2/36;
-      case 12: return 1/36 ;
-      default: throw `ERROR: It is impossible to roll a ${tileValue} with two D6's!`;
+  private setupHarbors() {
+    let defaultLocations = [
+      [0, 3],
+      [1, 5],
+      [10, 15],
+      [11, 16],
+      [26, 32],
+      [33, 38],
+      [42, 46],
+      [47, 51],
+      [49, 52]
+    ];
+    shuffle(defaultLocations);
+    let defaultHarborTypes = [
+      Resource.Brick,
+      Resource.Grain,
+      Resource.Lumber,
+      Resource.Ore,
+      Resource.Wool,
+      Resource.Desert,
+      Resource.Desert,
+      Resource.Desert,
+      Resource.Desert,
+    ]
+    for (let i = 0; i < defaultLocations.length; ++i) {
+      this.harbors.push(new Harbor(defaultLocations[i], defaultHarborTypes[i]));
     }
   }
 
