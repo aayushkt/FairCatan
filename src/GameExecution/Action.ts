@@ -1,5 +1,6 @@
 import { Resource } from '../GameState/Board';
 import { GameState } from '../GameState/GameState';
+import { Player } from '../GameState/Player';
 import { ProbabilityOfRollingValue } from '../utils';
 import { UpdateStateAfterRunningAction } from './GameRunner';
 
@@ -30,4 +31,22 @@ export function RollDice(gamestate: GameState) {
             }
         }
     }
+}
+
+
+// TODO:
+export function BuildSettlement(gamestate: GameState, player: Player) {
+    // check if there are any valid places to build (connected via roads with no settlments as neighbors)
+    // prompt the player to choose one of those places (or to cancel action)
+    // update the model 
+}
+
+// TODO
+export function BuildCity(gamestate: GameState, player: Player) {
+    
+}
+
+// TODO
+export function BuildRoad(gamestate: GameState, player: Player) {
+    
 }
