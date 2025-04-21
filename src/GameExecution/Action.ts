@@ -47,6 +47,11 @@ export function BuildCity(gamestate: GameState, player: Player) {
 }
 
 // TODO
+function PlacesCanBuildCity(gamestate: GameState, player: Player) : number[] {
+
+}
+
+// TODO
 export function BuildRoad(gamestate: GameState, player: Player) {
     
 }

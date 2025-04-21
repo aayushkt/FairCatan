@@ -248,6 +248,66 @@ export class Board {
     }
   }
 
+  public GetRoadsOfVertex(vertex: number): number[] {
+    switch (vertex) {
+      case 0: return [0, 1];
+      case 1: return [2, 3];
+      case 2: return [4, 5];
+      case 3: return [0, 6];
+      case 4: return [1, 2, 7];
+      case 5: return [3, 4, 8];
+      case 6: return [5, 9];
+      case 7: return [6, 10, 11];
+      case 8: return [7, 12, 13];
+      case 9: return [8, 14, 15];
+      case 10: return [9, 16, 17];
+      case 11: return [10, 18];
+      case 12: return [11, 12, 19];
+      case 13: return [13, 14, 20];
+      case 14: return [15, 16, 21];
+      case 15: return [17, 22];
+      case 16: return [18, 23, 24];
+      case 17: return [19, 25, 26];
+      case 18: return [20, 27, 28];
+      case 19: return [21, 29, 30];
+      case 20: return [22, 31, 32];
+      case 21: return [23, 33];
+      case 22: return [24, 25, 34];
+      case 23: return [26, 27, 35];
+      case 24: return [28, 29, 36];
+      case 25: return [30, 31, 37];
+      case 26: return [32, 38];
+      case 27: return [33, 39];
+      case 28: return [34, 40, 41];
+      case 29: return [35, 42, 43];
+      case 30: return [36, 44, 45];
+      case 31: return [37, 46, 47];
+      case 32: return [38, 48];
+      case 33: return [39, 40, 49];
+      case 34: return [41, 42, 50];
+      case 35: return [43, 44, 51];
+      case 36: return [45, 46, 52];
+      case 37: return [47, 48, 53];
+      case 38: return [49, 54];
+      case 39: return [50, 55, 56];
+      case 40: return [51, 57, 58];
+      case 41: return [52, 59, 60];
+      case 42: return [53, 61];
+      case 43: return [54, 55, 62];
+      case 44: return [56, 57, 63];
+      case 45: return [58, 59, 64];
+      case 46: return [60, 61, 65];
+      case 47: return [62, 66];
+      case 48: return [63, 67, 68];
+      case 49: return [64, 69, 70];
+      case 50: return [65, 71];
+      case 51: return [66, 67];
+      case 52: return [68, 69];
+      case 53: return [70, 71];
+      default: throw `ERROR: CANNOT FIND ROADS OF VERTEX ${vertex}, IT DOES NOT EXIST`;
+    }
+  }
+
   private setupHarbors() {
     let defaultLocations = [
       [0, 3],
