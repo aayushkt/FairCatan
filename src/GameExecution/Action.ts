@@ -37,8 +37,25 @@ export function RollDice(gamestate: GameState) {
 // TODO:
 export function BuildSettlement(gamestate: GameState, player: Player) {
     // check if there are any valid places to build (connected via roads with no settlments as neighbors)
+    let promptOptions = PlacesCanBuildSettlement(gamestate, player);
     // prompt the player to choose one of those places (or to cancel action)
     // update the model 
+}
+
+function PlacesCanBuildSettlement(gamestate: GameState, player: Player) {
+    let board = gamestate.board;
+    let options : number[] = [];
+    for (let i = 0; i < player.roads.length; ++i) {
+        // first add every vertex that is an endpoint of a road
+        let currRoad = player.roads[i];
+        let currEndPoints = board.GetVerticesOfRoad(currRoad);
+        options.push(currEndPoints[0])
+        options.push(currEndPoints[1])
+
+        // then remove all vertices that already have buildings there or directly neighboring
+
+    }
+    return options
 }
 
 // TODO
@@ -48,7 +65,7 @@ export function BuildCity(gamestate: GameState, player: Player) {
 
 // TODO
 function PlacesCanBuildCity(gamestate: GameState, player: Player) : number[] {
-
+    return [];
 }
 
 // TODO
