@@ -308,6 +308,84 @@ export class Board {
     }
   }
 
+  public GetVerticesOfRoad(road: number): number[] {
+    switch (road) {
+      case 0: return [0, 3];
+      case 1: return [0, 4];
+      case 2: return [1, 4];
+      case 3: return [1, 5];
+      case 4: return [2, 5];
+      case 5: return [2, 6];
+      case 6: return [3, 7];
+      case 7: return [4, 8];
+      case 8: return [5, 9];
+      case 9: return [6, 10];
+      case 10: return [7, 11];
+      case 11: return [7, 12];
+      case 12: return [8, 12];
+      case 13: return [8, 13];
+      case 14: return [9, 13];
+      case 15: return [9, 14];
+      case 16: return [10, 14];
+      case 17: return [10, 15];
+      case 18: return [11, 16];
+      case 19: return [12, 17];
+      case 20: return [13, 18];
+      case 21: return [14, 19];
+      case 22: return [15, 20];
+      case 23: return [16, 21];
+      case 24: return [16, 22];
+      case 25: return [17, 22];
+      case 26: return [17, 23];
+      case 27: return [18, 23];
+      case 28: return [18, 24];
+      case 29: return [19, 24];
+      case 30: return [19, 25];
+      case 31: return [20, 25];
+      case 32: return [20, 26];
+      case 33: return [21, 27];
+      case 34: return [22, 28];
+      case 35: return [23, 29];
+      case 36: return [24, 30];
+      case 37: return [25, 31];
+      case 38: return [26, 32];
+      case 39: return [27, 33];
+      case 40: return [28, 33];
+      case 41: return [28, 34];
+      case 42: return [29, 34];
+      case 43: return [29, 35];
+      case 44: return [30, 35];
+      case 45: return [30, 36];
+      case 46: return [31, 36];
+      case 47: return [31, 37];
+      case 48: return [32, 37];
+      case 49: return [33, 38];
+      case 50: return [34, 39];
+      case 51: return [35, 40];
+      case 52: return [36, 41];
+      case 53: return [37, 42];
+      case 54: return [38, 43];
+      case 55: return [39, 43];
+      case 56: return [39, 44];
+      case 57: return [40, 44];
+      case 58: return [40, 45];
+      case 59: return [41, 45];
+      case 60: return [41, 46];
+      case 61: return [42, 46];
+      case 62: return [43, 47];
+      case 63: return [44, 48];
+      case 64: return [45, 49];
+      case 65: return [46, 50];
+      case 66: return [47, 51];
+      case 67: return [48, 51];
+      case 68: return [48, 52];
+      case 69: return [49, 52];
+      case 70: return [49, 53];
+      case 71: return [50, 53];
+      default: throw `ERROR: CANNOT FIND VERTICES OF ROAD ${road}, IT DOES NOT EXIST`;
+    }
+  }
+
   private setupHarbors() {
     let defaultLocations = [
       [0, 3],
