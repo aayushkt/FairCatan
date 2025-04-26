@@ -18,10 +18,10 @@ export abstract class Action {
 export function RollDice(gamestate: GameState) {
     for (let playerIndex = 0; playerIndex < gamestate.players.length; ++playerIndex) {
         const player = gamestate.players[playerIndex];
-        for (let settlementIndex = 0; settlementIndex < player.settlements.length; ++settlementIndex) {
+        for (let settlementIndex = 0; settlementIndex < player.settlements.size; ++settlementIndex) {
             const settlement = player.settlements[settlementIndex];
             const tilesForSettlement = gamestate.board.GetTilesOfVertex(settlement);
-            for (let tileIndex = 0; tileIndex < tilesForSettlement.length; ++tileIndex) {
+            for (let tileIndex = 0; tileIndex < tilesForSettlement.size; ++tileIndex) {
                 const tile = tilesForSettlement[tileIndex];
                 const resource = gamestate.board.tileResources[tile];
                 if (resource != Resource.Desert) {
@@ -35,37 +35,35 @@ export function RollDice(gamestate: GameState) {
 
 
 // TODO:
-export function BuildSettlement(gamestate: GameState, player: Player) {
-    // check if there are any valid places to build (connected via roads with no settlments as neighbors)
-    let promptOptions = PlacesCanBuildSettlement(gamestate, player);
-    // prompt the player to choose one of those places (or to cancel action)
-    // update the model 
-}
+export function BuildSettlement(gamestate: GameState, player: Player, vertexLocation: number) {
+    //TODO: check that it is that players turn
 
-function PlacesCanBuildSettlement(gamestate: GameState, player: Player) {
-    let board = gamestate.board;
-    let options : number[] = [];
-    for (let i = 0; i < player.roads.length; ++i) {
-        // first add every vertex that is an endpoint of a road
-        let currRoad = player.roads[i];
-        let currEndPoints = board.GetVerticesOfRoad(currRoad);
-        options.push(currEndPoints[0])
-        options.push(currEndPoints[1])
-
-        // then remove all vertices that already have buildings there or directly neighboring
-
+    // check that the player has roads leading to the location they wish to build
+    let hasRoads : boolean = false;
+    let possibleRoads = gamestate.board.GetRoadsOfVertex(vertexLocation);
+    for (const road of player.roads) {
+        if (possibleRoads.has(road)) {
+            hasRoads = true;
+            break;
+        }
     }
-    return options
+    if (!hasRoads) return false;
+
+    // check that there is not a building already there or directly neighboring
+    for (const currPlayer of gamestate.players) {
+        if (currPlayer.cities.has(vertexLocation) || currPlayer.settlements.has(vertexLocation)) return false;
+        for (const neighbor of gamestate.board.GetNeighborsOfVertex(vertexLocation)) {
+            if (currPlayer.cities.has(neighbor) || currPlayer.settlements.has(neighbor)){
+                return false;
+            }
+        }
+    }
+    // update the model 
 }
 
 // TODO
 export function BuildCity(gamestate: GameState, player: Player) {
     
-}
-
-// TODO
-function PlacesCanBuildCity(gamestate: GameState, player: Player) : number[] {
-    return [];
 }
 
 // TODO

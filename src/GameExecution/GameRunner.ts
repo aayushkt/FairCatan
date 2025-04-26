@@ -21,6 +21,7 @@ function CheckIfSomeoneWon(gameState: GameState) {
     let players = gameState.players;
     for (let i = 0; i < players.length; ++i) {
         if (CalculateVictoryPointsForPlayer(gameState, players[i]) >= 10) {
+            if (gameState.winner != undefined) throw "ERROR: THERE IS A TIE!";
             gameState.winner = players[i];
             return;
         }
@@ -29,8 +30,8 @@ function CheckIfSomeoneWon(gameState: GameState) {
 
 function CalculateVictoryPointsForPlayer(gameState: GameState, player: Player) {
     let totalPoints: number = 0;
-    totalPoints += player.settlements.length;
-    totalPoints += (player.cities.length * 2);
+    totalPoints += player.settlements.size;
+    totalPoints += (player.cities.size * 2);
     if (gameState.longestRoad == player) totalPoints += 2;
     if (gameState.largestArmy == player) totalPoints += 2;
     return totalPoints;
