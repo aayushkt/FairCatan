@@ -33,10 +33,10 @@ export function RollDice(gamestate: GameState) {
     }
 }
 
+export function BuildSettlement(gamestate: GameState, player: Player, vertexLocation: number) : boolean {
 
-// TODO:
-export function BuildSettlement(gamestate: GameState, player: Player, vertexLocation: number) {
-    //TODO: check that it is that players turn
+    // players can only build settlements on their turn
+    if (gamestate.currentPlayer != player) return false;
 
     // check that the player has roads leading to the location they wish to build
     let hasRoads : boolean = false;
@@ -58,12 +58,24 @@ export function BuildSettlement(gamestate: GameState, player: Player, vertexLoca
             }
         }
     }
+
     // update the model 
+    player.settlements.add(vertexLocation);
+    return true;
 }
 
 // TODO
-export function BuildCity(gamestate: GameState, player: Player) {
+export function BuildCity(gamestate: GameState, player: Player, vertexLocation: number) : boolean {
     
+    // players can only build cities on their turn
+    if (gamestate.currentPlayer != player) return false;
+
+    // cities can only be built on top of settlements
+    if (!player.settlements.delete(vertexLocation)) return false;
+
+    player.cities.add(vertexLocation);
+    return true;
+
 }
 
 // TODO
