@@ -64,7 +64,6 @@ export function BuildSettlement(gamestate: GameState, player: Player, vertexLoca
     return true;
 }
 
-// TODO
 export function BuildCity(gamestate: GameState, player: Player, vertexLocation: number) : boolean {
     
     // players can only build cities on their turn
@@ -78,7 +77,17 @@ export function BuildCity(gamestate: GameState, player: Player, vertexLocation: 
 
 }
 
-// TODO
-export function BuildRoad(gamestate: GameState, player: Player) {
-    
+export function BuildRoad(gamestate: GameState, player: Player, roadLocation: number) : boolean {
+    // players can only build roads on their turn
+    if (gamestate.currentPlayer != player) return false;
+
+    // check that there is not already a road there
+    for (const currPlayer of gamestate.players) {
+        for (const road of player.roads) {
+            if (road == roadLocation) return false;
+        }
+    }
+
+    player.roads.add(roadLocation);
+    return true;
 }
