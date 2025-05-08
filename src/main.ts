@@ -3,16 +3,14 @@
   import { Player } from './GameState/Player';
   import { Board, Resource } from './GameState/Board';
   import { GameState } from './GameState/GameState';
-  import { RollDice } from './GameExecution/Action';
+  import { RollDice, AddPlayer } from './GameExecution/Action';
 
   let g = new GameState();
 
-  g.addPlayer("Alice");
-  g.addPlayer("Bob");
-  g.addPlayer("Charlie");
-  g.addPlayer("Devon");
-
-  g.setupGame();
+  AddPlayer(g, "Alice");
+  AddPlayer(g, "Bob");
+  AddPlayer(g, "Charlie");
+  AddPlayer(g, "Devon");
 
 
   // run the game forever until someone wins

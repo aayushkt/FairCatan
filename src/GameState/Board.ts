@@ -22,6 +22,7 @@ export class Board {
   settlements: (Player | undefined)[] = new Array(Board.NUM_VERTICES).fill(undefined);
   cities: (Player | undefined)[] = new Array(Board.NUM_VERTICES).fill(undefined);
   roads: (Player | undefined)[] = new Array(Board.NUM_ROADS).fill(undefined);
+  robber: number;
 
   constructor() {
     this.tileResources = this.generateTileResourcesRandomly();
@@ -68,6 +69,9 @@ export class Board {
 
     // shuffle them all up 
     shuffle(tileResources);
+
+    // place the robber on the desert
+    this.robber = tileResources.findIndex((x) => x == Resource.Desert);
 
     return tileResources;
   }
