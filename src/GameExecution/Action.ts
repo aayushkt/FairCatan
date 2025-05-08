@@ -1,4 +1,4 @@
-import { Resource } from '../GameState/Board';
+import { Board, Resource } from '../GameState/Board';
 import { GameState } from '../GameState/GameState';
 import { Player } from '../GameState/Player';
 import { ProbabilityOfRollingValue } from '../utils';
@@ -16,18 +16,27 @@ export abstract class Action {
 }
 
 export function RollDice(gamestate: GameState) {
-    for (let playerIndex = 0; playerIndex < gamestate.players.length; ++playerIndex) {
-        const player = gamestate.players[playerIndex];
-        for (let settlementIndex = 0; settlementIndex < player.settlements.size; ++settlementIndex) {
-            const settlement = player.settlements[settlementIndex];
-            const tilesForSettlement = gamestate.board.GetTilesOfVertex(settlement);
-            for (let tileIndex = 0; tileIndex < tilesForSettlement.size; ++tileIndex) {
-                const tile = tilesForSettlement[tileIndex];
+
+    for (let vertex = 0; vertex < Board.NUM_VERTICES; ++vertex) {
+        
+        // if a player has a settlement on that vertex
+        let owner = gamestate.board.settlements[vertex];
+        if (owner != undefined) {
+            for (const tile of gamestate.board.GetTilesOfVertex(vertex)) {
                 const resource = gamestate.board.tileResources[tile];
-                if (resource != Resource.Desert) {
-                    //console.log(`Player ${player.name} Got ${resource} amt: ${gamestate.board.RollProbability(gamestate.board.tileValues[tile])}`)
-                    player.resources[resource] += ProbabilityOfRollingValue(gamestate.board.tileValues[tile]);
-                }
+                if (resource == Resource.Desert) continue;
+                owner.resources[resource] += ProbabilityOfRollingValue(gamestate.board.tileValues[tile]);
+            }
+            continue;
+        } 
+
+        // if a player has a city on that vertex
+        owner = gamestate.board.cities[vertex];
+        if (owner != undefined) {
+            for (const tile of gamestate.board.GetTilesOfVertex(vertex)) {
+                const resource = gamestate.board.tileResources[tile];
+                if (resource == Resource.Desert) continue;
+                owner.resources[resource] += 2 * ProbabilityOfRollingValue(gamestate.board.tileValues[tile]);
             }
         }
     }
@@ -40,27 +49,22 @@ export function BuildSettlement(gamestate: GameState, player: Player, vertexLoca
 
     // check that the player has roads leading to the location they wish to build
     let hasRoads : boolean = false;
-    let possibleRoads = gamestate.board.GetRoadsOfVertex(vertexLocation);
-    for (const road of player.roads) {
-        if (possibleRoads.has(road)) {
-            hasRoads = true;
+    for (const possibleRoad of gamestate.board.GetRoadsOfVertex(vertexLocation)) {
+        if (gamestate.board.roads[possibleRoad] == player) {
+            hasRoads = true; 
             break;
         }
     }
     if (!hasRoads) return false;
 
     // check that there is not a building already there or directly neighboring
-    for (const currPlayer of gamestate.players) {
-        if (currPlayer.cities.has(vertexLocation) || currPlayer.settlements.has(vertexLocation)) return false;
-        for (const neighbor of gamestate.board.GetNeighborsOfVertex(vertexLocation)) {
-            if (currPlayer.cities.has(neighbor) || currPlayer.settlements.has(neighbor)){
-                return false;
-            }
-        }
+    if (gamestate.board.settlements[vertexLocation] != undefined || gamestate.board.cities[vertexLocation] != undefined) return false;
+    for (const neighbor of gamestate.board.GetNeighborsOfVertex(vertexLocation)) {
+        if (gamestate.board.settlements[neighbor] != undefined || gamestate.board.cities[neighbor] != undefined) return false;
     }
 
     // update the model 
-    player.settlements.add(vertexLocation);
+    gamestate.board.settlements[vertexLocation] = player;
     return true;
 }
 
@@ -70,9 +74,10 @@ export function BuildCity(gamestate: GameState, player: Player, vertexLocation: 
     if (gamestate.currentPlayer != player) return false;
 
     // cities can only be built on top of settlements
-    if (!player.settlements.delete(vertexLocation)) return false;
+    if (gamestate.board.settlements[vertexLocation] != player) return false;
 
-    player.cities.add(vertexLocation);
+    gamestate.board.settlements[vertexLocation] = undefined;
+    gamestate.board.cities[vertexLocation] = player;
     return true;
 
 }
@@ -82,12 +87,17 @@ export function BuildRoad(gamestate: GameState, player: Player, roadLocation: nu
     if (gamestate.currentPlayer != player) return false;
 
     // check that there is not already a road there
-    for (const currPlayer of gamestate.players) {
-        for (const road of player.roads) {
-            if (road == roadLocation) return false;
+    if (gamestate.board.roads[roadLocation] != undefined) return false;
+
+    // make sure there is a road connected to this location
+    for (const endpoint of gamestate.board.GetVerticesOfRoad(roadLocation)) {
+        for (const connectingRoad of gamestate.board.GetRoadsOfVertex(endpoint)) {
+            if (gamestate.board.roads[connectingRoad] == player) {
+                gamestate.board.roads[roadLocation] = player;
+                return true;
+            }
         }
     }
 
-    player.roads.add(roadLocation);
-    return true;
+    return false;
 }

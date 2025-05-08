@@ -3,7 +3,6 @@
   import { Player } from './GameState/Player';
   import { Board, Resource } from './GameState/Board';
   import { GameState } from './GameState/GameState';
-  import { CalculatePossibleActions } from './GameExecution/GameRunner';
   import { RollDice } from './GameExecution/Action';
 
   let g = new GameState();
@@ -17,8 +16,7 @@
 
 
   // run the game forever until someone wins
-  let possibleActions = CalculatePossibleActions(g);
-  while(possibleActions.length != 0) {
+  while(g.winner == undefined) {
     // send all clients the possible actions that can be taken
     // listen for a response,
     // if the response is a valid action, enact it, then repeat

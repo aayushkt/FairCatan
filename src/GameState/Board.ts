@@ -1,4 +1,6 @@
 import { shuffle } from '../utils';
+import { Player } from './Player';
+
 
 export class Harbor {
   locations: number[];
@@ -11,9 +13,15 @@ export class Harbor {
 
 export class Board {
 
+  static readonly NUM_VERTICES = 54;
+  static readonly NUM_ROADS = 72;
+
   harbors: Harbor[] = []; // a desert resource represents a 3:1 harbor of any type
   tileValues: number[];
   tileResources: Resource[];
+  settlements: (Player | undefined)[] = new Array(Board.NUM_VERTICES).fill(undefined);
+  cities: (Player | undefined)[] = new Array(Board.NUM_VERTICES).fill(undefined);
+  roads: (Player | undefined)[] = new Array(Board.NUM_ROADS).fill(undefined);
 
   constructor() {
     this.tileResources = this.generateTileResourcesRandomly();

@@ -2,15 +2,6 @@ import { Action } from './Action';
 import { GameState } from '../GameState/GameState';
 import { Player } from '../GameState/Player';
 
-export function CalculatePossibleActions(gameState: GameState) {
-
-    let possibleActions: Action[] = [];
-
-    if (gameState.winner != undefined) return possibleActions;
-
-    return possibleActions;
-}
-
 // this function needs to run after every time an action is ran.
 export function UpdateStateAfterRunningAction(gameState: GameState) {
     CheckIfSomeoneWon(gameState);
@@ -30,8 +21,12 @@ function CheckIfSomeoneWon(gameState: GameState) {
 
 function CalculateVictoryPointsForPlayer(gameState: GameState, player: Player) {
     let totalPoints: number = 0;
-    totalPoints += player.settlements.size;
-    totalPoints += (player.cities.size * 2);
+    for (const owner of gameState.board.settlements) {
+        if (owner == player) totalPoints++;
+    }
+    for (const owner of gameState.board.cities) {
+        if (owner == player) totalPoints += 2;
+    }
     if (gameState.longestRoad == player) totalPoints += 2;
     if (gameState.largestArmy == player) totalPoints += 2;
     return totalPoints;
