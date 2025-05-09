@@ -387,7 +387,7 @@ export class Board {
   }
 
   private setupHarbors() {
-    let defaultLocations = [
+    const defaultLocations = [
       [0, 3],
       [1, 5],
       [10, 15],
@@ -399,7 +399,7 @@ export class Board {
       [49, 52]
     ];
     shuffle(defaultLocations);
-    let defaultHarborTypes = [
+    const defaultHarborTypes = [
       Resource.Brick,
       Resource.Grain,
       Resource.Lumber,
