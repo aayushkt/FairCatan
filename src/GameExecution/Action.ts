@@ -79,6 +79,11 @@ export function BuildSettlement(gameState: GameState, player: Player, vertexLoca
     if (gameState.currentPlayer != player) return false;
 
     // players must have the required resources to build a settlement
+    if (player.resources[Resource.Brick] < 1 ||
+        player.resources[Resource.Lumber] < 1 ||
+        player.resources[Resource.Wool] < 1 || 
+        player.resources[Resource.Grain] < 1
+    ) return false;
 
     // check that the player has roads leading to the location they wish to build
     let hasRoads : boolean = false;
@@ -106,6 +111,11 @@ export function BuildCity(gameState: GameState, player: Player, vertexLocation: 
     // players can only build cities on their turn
     if (gameState.currentPlayer != player) return false;
 
+    // players must have the required resources to build a city
+    if (player.resources[Resource.Ore] < 3 ||
+        player.resources[Resource.Grain] < 2
+    ) return false;
+
     // cities can only be built on top of settlements
     if (gameState.board.settlements[vertexLocation] != player) return false;
 
@@ -118,6 +128,11 @@ export function BuildCity(gameState: GameState, player: Player, vertexLocation: 
 export function BuildRoad(gameState: GameState, player: Player, roadLocation: number) : boolean {
     // players can only build roads on their turn
     if (gameState.currentPlayer != player) return false;
+
+    // players must have the required resources to build a road
+    if (player.resources[Resource.Brick] < 1 ||
+        player.resources[Resource.Lumber] < 1
+    ) return false;
 
     // check that there is not already a road there
     if (gameState.board.roads[roadLocation] != undefined) return false;
