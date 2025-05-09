@@ -1,4 +1,4 @@
-import { Board, Resource } from '../GameState/Board';
+import { Board, Resource, Harbor } from '../GameState/Board';
 import { GameState } from '../GameState/GameState';
 import { Player } from '../GameState/Player';
 import { ProbabilityOfRollingValue } from '../utils';
@@ -170,8 +170,41 @@ export function DeclineTrade() {
 
 }
 
-export function UseHarbor() {
+export function UseHarbor(gameState: GameState, player: Player, wantResource: Resource, giveResource: Resource, harborVertexLocation: number): string {
 
+    // check that it is the players turn
+    if (gameState.currentPlayer != player) return "You can only trade at harbors during your turn";
+
+    // get the harbor at the specificed location
+    const harbor: (Harbor | undefined) = gameState.board.harbors.find(harbor => harbor.locations[0] == harborVertexLocation || harbor.locations[1] == harborVertexLocation);
+    if (harbor == undefined) return `There is no harbor located at vertex ${harborVertexLocation}`;
+
+    // you cannot trade to get a desert resource so we check the wantResource arg,
+    // the giveResource arg is only checked later if the harbor is a 3:1 harbor (desert resource type)
+    if (wantResource == Resource.Desert) return "You cannot trade for the desert resource at a harbor";
+
+    // check that they have a city or settlement at the specified location
+    if (gameState.board.cities[harborVertexLocation] != player && gameState.board.settlements[harborVertexLocation] != player) return `You do not have a city or settlement at vertex ${harborVertexLocation}`;
+
+    // make sure the player has enough resources to give of the specified type
+    if (harbor.harborType == Resource.Desert) {
+        if (giveResource == Resource.Desert) return `You cannot trade using a desert resource at a harbor`;
+        if (player.resources[giveResource] < 3) return `You need at least 3 ${giveResource} to trade, you only have ${player.resources[giveResource]}`;
+    } else {
+        giveResource = harbor.harborType;
+        if (player.resources[giveResource] < 2) return `You need at least 2 ${giveResource} to trade, you only have ${player.resources[giveResource]}`;
+    }
+
+    // actually use the harbor
+    if (harbor.harborType == Resource.Desert) {
+        player.resources[giveResource] -= 3;
+        player.resources[wantResource] += 1;
+        return `Player ${player.name} traded 3 ${giveResource} for 1 ${wantResource} at harbor ${harborVertexLocation}`;
+    } else {
+        player.resources[giveResource] -= 2;
+        player.resources[wantResource] += 1;
+        return `Player ${player.name} traded 2 ${giveResource} for 1 ${wantResource} at harbor ${harborVertexLocation}`;
+    }
 }
 
 export function BankExchange() {
