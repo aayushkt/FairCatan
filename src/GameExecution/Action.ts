@@ -1,6 +1,6 @@
 import { Board, Resource, Harbor } from '../GameState/Board';
 import { GameState } from '../GameState/GameState';
-import { Player } from '../GameState/Player';
+import { DevCard, Player } from '../GameState/Player';
 import { ProbabilityOfRollingValue } from '../utils';
 import { UpdateStateAfterRunningAction } from './GameRunner';
 import { shuffle } from '../utils';
@@ -150,12 +150,26 @@ export function BuildRoad(gameState: GameState, player: Player, roadLocation: nu
     return false;
 }
 
-export function BuyDevCard(gameState: GameState, player: Player) {
-
+export function BuyDevCard(gameState: GameState, player: Player): string {
+    if (gameState.currentPlayer != player) return "You can only buy development cards during your turn";
+    if (player.resources[Resource.Ore] < 1 ||
+        player.resources[Resource.Wool] < 1 ||
+        player.resources[Resource.Grain] < 1
+    ) return `You need at least 1 ore, 1 wool, and 1 grain to buy a development card, you have ${player.resources[Resource.Ore]} ore, ${player.resources[Resource.Wool]} wool, and ${player.resources[Resource.Grain]} grain`;
+    const card = gameState.devCards.pop();
+    if (card == undefined) return "There are no development cards left to buy";
+    player.devCards.push(card);
+    gameState.cardsBoughtThisTurn.push(card);
+    return `Player ${player.name} bought a development card`;
 }
 
-export function PlayDevCard(gameState: GameState, player: Player) {
-
+export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: DevCard) {
+    if (gameState.currentPlayer != player) return "You can only play development cards during your turn";
+    const numOfCardsPlayerOwns = player.devCards.filter(x => x == cardToPlay).length;
+    if (numOfCardsPlayerOwns <= 0) return `You do not have a ${cardToPlay} development card`;
+    const numOfCardsBoughtThisTurn = gameState.cardsBoughtThisTurn.filter(x => x == cardToPlay).length;
+    if (numOfCardsBoughtThisTurn >= numOfCardsPlayerOwns) return "You cannot play development cards on the same turn you bought them";
+    
 }
 
 export function OfferTrade(gameState: GameState, initiator: Player, recipient: Player, wantResource: Resource, giveResource: Resource, wantAmount: number, giveAmount: number) {
