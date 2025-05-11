@@ -207,8 +207,13 @@ export function UseHarbor(gameState: GameState, player: Player, wantResource: Re
     }
 }
 
-export function BankExchange() {
-
+export function BankExchange(gameState: GameState, player: Player, wantResource: Resource, giveResource: Resource): string {
+    if (gameState.currentPlayer != player) return "You can only trade at harbors during your turn";
+    if (wantResource == Resource.Desert || giveResource == Resource.Desert) return "You cannot trade with/for the desert resource";
+    if (player.resources[giveResource] < 4) return `You must have at least 4 ${giveResource} to exchange with the bank, you only have ${player.resources[giveResource]}`
+    player.resources[giveResource] -= 4;
+    player.resources[wantResource] += 1;
+    return `Player ${player.name} traded 4 ${giveResource} for 1 ${wantResource} with the bank`;
 }
 
 export function EndTurn() {
