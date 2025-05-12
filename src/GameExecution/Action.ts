@@ -170,6 +170,25 @@ export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: De
     const numOfCardsBoughtThisTurn = gameState.cardsBoughtThisTurn.filter(x => x == cardToPlay).length;
     if (numOfCardsBoughtThisTurn >= numOfCardsPlayerOwns) return "You cannot play development cards on the same turn you bought them";
     
+    switch (cardToPlay) {
+        case DevCard.Knight:
+            break;
+
+        case DevCard.RoadBuilding:
+            break;
+
+        case DevCard.YearOfPlenty:
+            break;
+
+        case DevCard.Monopoly:
+            break;
+
+        case DevCard.VictoryPoint:
+            break;
+    }
+
+    // remove the card played from the player
+    player.devCards.splice(player.devCards.indexOf(cardToPlay));
 }
 
 export function OfferTrade(gameState: GameState, initiator: Player, recipient: Player, wantResource: Resource, giveResource: Resource, wantAmount: number, giveAmount: number) {
