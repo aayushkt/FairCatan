@@ -10,15 +10,17 @@ export enum DevCard {
 
 export class Player {
     name: string;
-    resources: { [ResourceType: string]: number} = { };
+    resources: Record<Resource, number> = {
+      "Brick": 0,
+      "Lumber": 0,
+      "Ore": 0,
+      "Grain": 0,
+      "Wool": 0,
+    };
     devCards: DevCard[] = [];
 
     constructor(name: string) {
       this.name = name;
-      for (let item in Resource) {
-        if (item == Resource.Desert) continue;
-        this.resources[item] = 0;  
-      }
     }
   
   }

@@ -11,6 +11,7 @@ export class GameState {
     longestRoad: (Player|undefined);
     largestArmy: (Player|undefined);
     cardsBoughtThisTurn: DevCard[];
+    devCardPlayedThisTurn: boolean;
 
     constructor() {
         this.players = [];
@@ -20,6 +21,7 @@ export class GameState {
         this.longestRoad = undefined;
         this.largestArmy = undefined;
         this.cardsBoughtThisTurn = [];
+        this.devCardPlayedThisTurn = false;
     }
 }
 

@@ -167,6 +167,8 @@ export function BuyDevCard(gameState: GameState, player: Player): string {
 
 export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: DevCard, args: number[]) {
     if (gameState.currentPlayer != player) return "You can only play development cards during your turn";
+    if (gameState.devCardPlayedThisTurn) return "You can only play one development card per turn";
+    if (cardToPlay == DevCard.VictoryPoint) return "You can't play victory cards";
     const numOfCardsPlayerOwns = player.devCards.filter(x => x == cardToPlay).length;
     if (numOfCardsPlayerOwns <= 0) return `You do not have a ${cardToPlay} development card`;
     const numOfCardsBoughtThisTurn = gameState.cardsBoughtThisTurn.filter(x => x == cardToPlay).length;
@@ -174,7 +176,36 @@ export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: De
     
     switch (cardToPlay) {
         case DevCard.Knight:
-            if (args.length < 2) return `You need two arguments to play a knight card: the tile you move the robber to, and the vertex of the settlement you are stealing from`;
+            if (args.length > 2) return `You can have a maximum of two arguments when playing a knight card: The tile you move the robber to, and (if applicable) the opponent to steal from`;
+            if (args.length < 1) return `You need at least one argument to play a knight card: the tile you move the robber to`;
+            const tile = args[0];
+            if (tile == gameState.board.robber) return "You must move the robber to a different tile when playing the knight card";
+            if (tile < 0 || tile >= gameState.board.tileResources.length) return `Tiles are numbered 0-${gameState.board.tileResources.length - 1}, no tile with number ${tile} exists`;
+            if (args.length == 2) {
+                const victimVertex = args[1];
+                if (!gameState.board.GetVerticesOfTile(tile).has(victimVertex)) return `The vertex ${victimVertex} is not on the tile ${tile}, you must steal from a player on that tile`;
+                let victim = gameState.board.settlements[victimVertex];
+                if (victim == undefined) victim = gameState.board.cities[victimVertex];
+                if (victim == undefined) return `There is no player on vertex ${victim} to steal from`;
+                if (victim == player) return `You cannot steal from yourself`;
+                
+                // actually play the card if we pass all the checks
+                gameState.board.robber = tile;
+                let resourcesCanSteal: Resource[] = [];
+                victim.resources.
+                for (const resource of victim.resources) {
+
+                }
+            } else {
+                for (const vertex of gameState.board.GetVerticesOfTile(tile)) {
+                    if (gameState.board.settlements[vertex] != undefined && gameState.board.settlements[vertex] != player) return `You must steal from an opponent built on the tile you are placing the robber on`;
+                    if (gameState.board.cities[vertex] != undefined && gameState.board.cities[vertex] != player) return `You must steal from an opponent built on the tile you are placing the robber on`;
+                }
+
+                // actually play the card if we pass all the checks
+                gameState.board.robber = tile;
+            }
+            
             break;
 
         case DevCard.RoadBuilding:
@@ -182,19 +213,17 @@ export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: De
             break;
 
         case DevCard.YearOfPlenty:
-            if (args.length != 2) return `You need to select two resources to take, 0=Lumber, 1=Wool, ...`;
+            if (args.length != 2) return `You need to select two resources to take, 0=Brick, 1=Lumber, 2=Ore, 3=Grain, 4=Wool`;
             break;
 
         case DevCard.Monopoly:
-            if (args.length != 2) return `You need to name a resource, 0=Lumber, 1=Wool, ...`;
-            break;
-
-        case DevCard.VictoryPoint:
+            if (args.length != 2) return `You need to name a resource, 0=Brick, 1=Lumber, 2=Ore, 3=Grain, 4=Wool`;
             break;
     }
 
     // remove the card played from the player
     player.devCards.splice(player.devCards.indexOf(cardToPlay));
+    gameState.devCardPlayedThisTurn = true;
 }
 
 export function OfferTrade(gameState: GameState, initiator: Player, recipient: Player, wantResource: Resource, giveResource: Resource, wantAmount: number, giveAmount: number) {
