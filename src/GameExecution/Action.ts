@@ -51,6 +51,7 @@ export function RollDice(gameState: GameState) : string[] {
         let owner = gameState.board.settlements[vertex];
         if (owner != undefined) {
             for (const tile of gameState.board.GetTilesOfVertex(vertex)) {
+                if (gameState.board.robber == tile) continue;
                 const resource = gameState.board.tileResources[tile];
                 if (resource == Resource.Desert) continue;
                 owner.resources[resource] += ProbabilityOfRollingValue(gameState.board.tileValues[tile]);
@@ -63,6 +64,7 @@ export function RollDice(gameState: GameState) : string[] {
         owner = gameState.board.cities[vertex];
         if (owner != undefined) {
             for (const tile of gameState.board.GetTilesOfVertex(vertex)) {
+                if (gameState.board.robber == tile) continue;
                 const resource = gameState.board.tileResources[tile];
                 if (resource == Resource.Desert) continue;
                 owner.resources[resource] += 2 * ProbabilityOfRollingValue(gameState.board.tileValues[tile]);
@@ -163,7 +165,7 @@ export function BuyDevCard(gameState: GameState, player: Player): string {
     return `Player ${player.name} bought a development card`;
 }
 
-export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: DevCard) {
+export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: DevCard, args: number[]) {
     if (gameState.currentPlayer != player) return "You can only play development cards during your turn";
     const numOfCardsPlayerOwns = player.devCards.filter(x => x == cardToPlay).length;
     if (numOfCardsPlayerOwns <= 0) return `You do not have a ${cardToPlay} development card`;
@@ -172,15 +174,19 @@ export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: De
     
     switch (cardToPlay) {
         case DevCard.Knight:
+            if (args.length < 2) return `You need two arguments to play a knight card: the tile you move the robber to, and the vertex of the settlement you are stealing from`;
             break;
 
         case DevCard.RoadBuilding:
+            if (args.length == 0 || args.length > 2) return `Provide two arguments for the two road places you want to build`;
             break;
 
         case DevCard.YearOfPlenty:
+            if (args.length != 2) return `You need to select two resources to take, 0=Lumber, 1=Wool, ...`;
             break;
 
         case DevCard.Monopoly:
+            if (args.length != 2) return `You need to name a resource, 0=Lumber, 1=Wool, ...`;
             break;
 
         case DevCard.VictoryPoint:
