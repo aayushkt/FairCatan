@@ -1,6 +1,6 @@
 import { Action } from './Action';
 import { GameState } from '../GameState/GameState';
-import { Player } from '../GameState/Player';
+import { DevCard, Player } from '../GameState/Player';
 
 // this function needs to run after every time an action is ran.
 export function UpdateStateAfterRunningAction(gameState: GameState) {
@@ -31,18 +31,3 @@ function CalculateVictoryPointsForPlayer(gameState: GameState, player: Player) {
     if (gameState.largestArmy == player) totalPoints += 2;
     return totalPoints;
 }
-
-/*
-List of all the actions a Player can take:
-    Roll Dice (can only do once per turn)
-    Build Road
-    Build City
-    Build Settlement
-    Offer Trade
-    Deny Trade
-    Buy Dev Card
-    Play Dev Card
-    Discard half their hand
-    Place the robber 
-    Steal a card
-*/
