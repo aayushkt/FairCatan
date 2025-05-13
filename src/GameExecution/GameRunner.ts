@@ -21,6 +21,7 @@ function CheckIfSomeoneWon(gameState: GameState) {
 
 function CalculateVictoryPointsForPlayer(gameState: GameState, player: Player) {
     let totalPoints: number = 0;
+    totalPoints += player.devCards.filter(card => card == DevCard.VictoryPoint).length;
     for (const owner of gameState.board.settlements) {
         if (owner == player) totalPoints++;
     }
