@@ -4,8 +4,8 @@ import { Player } from './Player';
 
 export class Harbor {
   locations: number[];
-  harborType: Resource; // a desert resource represents a 3:1 harbor of any type
-  constructor(locations: number[], harborType: Resource) {
+  harborType: (Resource | undefined); // a undefined represents a 3:1 harbor of any type
+  constructor(locations: number[], harborType: (Resource | undefined)) {
     this.locations = locations;
     this.harborType = harborType;
   }
@@ -18,7 +18,7 @@ export class Board {
 
   harbors: Harbor[] = []; // a desert resource represents a 3:1 harbor of any type
   tileValues: number[];
-  tileResources: Resource[];
+  tileResources: (Resource | undefined)[];
   settlements: (Player | undefined)[] = new Array(Board.NUM_VERTICES).fill(undefined);
   cities: (Player | undefined)[] = new Array(Board.NUM_VERTICES).fill(undefined);
   roads: (Player | undefined)[] = new Array(Board.NUM_ROADS).fill(undefined);
@@ -30,9 +30,9 @@ export class Board {
     this.setupHarbors();
   }
 
-  private generateTileResourcesRandomly(): Resource[] {
+  private generateTileResourcesRandomly(): (Resource | undefined)[] {
 
-    let tileResources: Resource[] = [];
+    let tileResources: (Resource | undefined)[] = [];
 
     // default catan board contains:
 
@@ -65,24 +65,24 @@ export class Board {
     tileResources.push(Resource.Wool);
 
     // and 1 desert
-    tileResources.push(Resource.Desert);
+    tileResources.push(undefined);
 
     // shuffle them all up 
     shuffle(tileResources);
 
     // place the robber on the desert
-    this.robber = tileResources.findIndex((x) => x == Resource.Desert);
+    this.robber = tileResources.findIndex((x) => x == undefined);
 
     return tileResources;
   }
 
-  private generateTileValuesAccordingToAlphabet(tileResources: Resource[]): number[] {
+  private generateTileValuesAccordingToAlphabet(tileResources: (Resource | undefined)[]): number[] {
     let tileValues: number[] = [];
     // note: this is the values in their (reverse) alphabetical-spiral order 
     // that corresponds to the official rule book (not the "Variable Setup")
     let orderedValues = [11, 3, 6, 5, 4, 9, 10, 8, 4, 11, 12, 9, 10, 8, 3, 6, 2, 5];
     for (let i = 0; i < tileResources.length; ++i) {
-      if (tileResources[i] == Resource.Desert) {
+      if (tileResources[i] == undefined) {
         tileValues.push(0);
         continue;
       }
@@ -405,10 +405,10 @@ export class Board {
       Resource.Lumber,
       Resource.Ore,
       Resource.Wool,
-      Resource.Desert,
-      Resource.Desert,
-      Resource.Desert,
-      Resource.Desert,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
     ]
     for (let i = 0; i < defaultLocations.length; ++i) {
       this.harbors.push(new Harbor(defaultLocations[i], defaultHarborTypes[i]));
@@ -423,5 +423,4 @@ export enum Resource {
   Ore="Ore",
   Grain="Grain",
   Wool="Wool",
-  Desert="Desert"
 }

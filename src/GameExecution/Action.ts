@@ -53,7 +53,7 @@ export function RollDice(gameState: GameState) : string[] {
             for (const tile of gameState.board.GetTilesOfVertex(vertex)) {
                 if (gameState.board.robber == tile) continue;
                 const resource = gameState.board.tileResources[tile];
-                if (resource == Resource.Desert) continue;
+                if (resource == undefined) continue;
                 owner.resources[resource] += ProbabilityOfRollingValue(gameState.board.tileValues[tile]);
                 result.push(`${owner.name} gains ${ProbabilityOfRollingValue(gameState.board.tileValues[tile])} of ${resource}`);
             }
@@ -66,7 +66,7 @@ export function RollDice(gameState: GameState) : string[] {
             for (const tile of gameState.board.GetTilesOfVertex(vertex)) {
                 if (gameState.board.robber == tile) continue;
                 const resource = gameState.board.tileResources[tile];
-                if (resource == Resource.Desert) continue;
+                if (resource == undefined) continue;
                 owner.resources[resource] += 2 * ProbabilityOfRollingValue(gameState.board.tileValues[tile]);
                 result.push(`${owner.name} gains ${2*ProbabilityOfRollingValue(gameState.board.tileValues[tile])} of ${resource}`);
             }
@@ -192,10 +192,7 @@ export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: De
                 // actually play the card if we pass all the checks
                 gameState.board.robber = tile;
                 let resourcesCanSteal: Resource[] = [];
-                victim.resources.
-                for (const resource of victim.resources) {
-
-                }
+                // TODO: FINISH THIS
             } else {
                 for (const vertex of gameState.board.GetVerticesOfTile(tile)) {
                     if (gameState.board.settlements[vertex] != undefined && gameState.board.settlements[vertex] != player) return `You must steal from an opponent built on the tile you are placing the robber on`;
@@ -247,28 +244,17 @@ export function UseHarbor(gameState: GameState, player: Player, wantResource: Re
     const harbor: (Harbor | undefined) = gameState.board.harbors.find(harbor => harbor.locations[0] == harborVertexLocation || harbor.locations[1] == harborVertexLocation);
     if (harbor == undefined) return `There is no harbor located at vertex ${harborVertexLocation}`;
 
-    // you cannot trade to get a desert resource so we check the wantResource arg,
-    // the giveResource arg is only checked later if the harbor is a 3:1 harbor (desert resource type)
-    if (wantResource == Resource.Desert) return "You cannot trade for the desert resource at a harbor";
-
     // check that they have a city or settlement at the specified location
     if (gameState.board.cities[harborVertexLocation] != player && gameState.board.settlements[harborVertexLocation] != player) return `You do not have a city or settlement at vertex ${harborVertexLocation}`;
 
     // make sure the player has enough resources to give of the specified type
-    if (harbor.harborType == Resource.Desert) {
-        if (giveResource == Resource.Desert) return `You cannot trade using a desert resource at a harbor`;
+    if (harbor.harborType == undefined) {
         if (player.resources[giveResource] < 3) return `You need at least 3 ${giveResource} to trade, you only have ${player.resources[giveResource]}`;
-    } else {
-        giveResource = harbor.harborType;
-        if (player.resources[giveResource] < 2) return `You need at least 2 ${giveResource} to trade, you only have ${player.resources[giveResource]}`;
-    }
-
-    // actually use the harbor
-    if (harbor.harborType == Resource.Desert) {
         player.resources[giveResource] -= 3;
         player.resources[wantResource] += 1;
         return `Player ${player.name} traded 3 ${giveResource} for 1 ${wantResource} at harbor ${harborVertexLocation}`;
     } else {
+        if (player.resources[giveResource] < 2) return `You need at least 2 ${giveResource} to trade, you only have ${player.resources[giveResource]}`;
         player.resources[giveResource] -= 2;
         player.resources[wantResource] += 1;
         return `Player ${player.name} traded 2 ${giveResource} for 1 ${wantResource} at harbor ${harborVertexLocation}`;
@@ -277,7 +263,6 @@ export function UseHarbor(gameState: GameState, player: Player, wantResource: Re
 
 export function BankExchange(gameState: GameState, player: Player, wantResource: Resource, giveResource: Resource): string {
     if (gameState.currentPlayer != player) return "You can only trade at harbors during your turn";
-    if (wantResource == Resource.Desert || giveResource == Resource.Desert) return "You cannot trade with/for the desert resource";
     if (player.resources[giveResource] < 4) return `You must have at least 4 ${giveResource} to exchange with the bank, you only have ${player.resources[giveResource]}`
     player.resources[giveResource] -= 4;
     player.resources[wantResource] += 1;
