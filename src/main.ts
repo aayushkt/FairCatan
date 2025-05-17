@@ -1,4 +1,5 @@
   // download tsx from npm and run: npx tsx src/main.ts
+  // if this doesn't work due to error 'running scripts is disabled on this system', click the dropdown next to the '+' for a new terminal and run it from command prompt, not powershell
 
   import { Player } from './GameState/Player';
   import { Board, Resource } from './GameState/Board';
@@ -18,6 +19,7 @@
     // send all clients the possible actions that can be taken
     // listen for a response,
     // if the response is a valid action, enact it, then repeat
+    break;
   }
 
   // print outcome
