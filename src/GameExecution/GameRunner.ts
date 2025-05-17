@@ -5,7 +5,8 @@ import { DevCard, Player } from '../GameState/Player';
 // this function needs to run after every time an action is ran.
 export function UpdateStateAfterRunningAction(gameState: GameState) {
     CheckIfSomeoneWon(gameState);
-    // TODO: Add checks to distribute longest road and largest army here
+    UpdateLongestRoad(gameState);
+    UpdateLargestArmy(gameState);
 }
 
 function CheckIfSomeoneWon(gameState: GameState) {
@@ -21,7 +22,7 @@ function CheckIfSomeoneWon(gameState: GameState) {
 
 function CalculateVictoryPointsForPlayer(gameState: GameState, player: Player) {
     let totalPoints: number = 0;
-    totalPoints += player.devCards.filter(card => card == DevCard.VictoryPoint).length;
+    totalPoints += player.playableDevCards.filter(card => card == DevCard.VictoryPoint).length;
     for (const owner of gameState.board.settlements) {
         if (owner == player) totalPoints++;
     }
@@ -31,4 +32,24 @@ function CalculateVictoryPointsForPlayer(gameState: GameState, player: Player) {
     if (gameState.longestRoad == player) totalPoints += 2;
     if (gameState.largestArmy == player) totalPoints += 2;
     return totalPoints;
+}
+
+export function UpdateLongestRoad(gameState: GameState) {
+    // TODO
+}
+
+export function UpdateLargestArmy(gameState: GameState) {
+    let largestArmy: number;
+    if (gameState.largestArmy != undefined) {
+        largestArmy = gameState.largestArmy.playedDevCards.filter(x => x == DevCard.Knight).length;
+    } else {
+        largestArmy = 2;
+    }
+    for (const player of gameState.players) {
+        const armySize = player.playedDevCards.filter(x => x == DevCard.Knight).length;
+        if (armySize > largestArmy) {
+            gameState.largestArmy = player;
+            largestArmy = armySize;
+        }
+    }
 }
