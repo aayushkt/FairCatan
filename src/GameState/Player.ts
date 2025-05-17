@@ -17,8 +17,8 @@ export class Player {
       "Grain": 0,
       "Wool": 0,
     };
-    devCards: DevCard[] = [];
-
+    playableDevCards: DevCard[] = [];
+    playedDevCards: DevCard[] = []; // this is where knight and progress cards go after being played. Victory cards always remain in playableDevCards[]
     constructor(name: string) {
       this.name = name;
     }

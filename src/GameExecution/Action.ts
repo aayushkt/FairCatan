@@ -160,16 +160,16 @@ export function BuyDevCard(gameState: GameState, player: Player): string {
     ) return `You need at least 1 ore, 1 wool, and 1 grain to buy a development card, you have ${player.resources[Resource.Ore]} ore, ${player.resources[Resource.Wool]} wool, and ${player.resources[Resource.Grain]} grain`;
     const card = gameState.devCards.pop();
     if (card == undefined) return "There are no development cards left to buy";
-    player.devCards.push(card);
+    player.playableDevCards.push(card);
     gameState.cardsBoughtThisTurn.push(card);
     return `Player ${player.name} bought a development card`;
 }
 
-export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: DevCard, args: number[]) {
+export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: DevCard, args: number[]): string {
     if (gameState.currentPlayer != player) return "You can only play development cards during your turn";
     if (gameState.devCardPlayedThisTurn) return "You can only play one development card per turn";
-    if (cardToPlay == DevCard.VictoryPoint) return "You can't play victory cards";
-    const numOfCardsPlayerOwns = player.devCards.filter(x => x == cardToPlay).length;
+    if (cardToPlay == DevCard.VictoryPoint) return "You can't play victory cards, they will automatically be revealed once you reach 10 points";
+    const numOfCardsPlayerOwns = player.playableDevCards.filter(x => x == cardToPlay).length;
     if (numOfCardsPlayerOwns <= 0) return `You do not have a ${cardToPlay} development card`;
     const numOfCardsBoughtThisTurn = gameState.cardsBoughtThisTurn.filter(x => x == cardToPlay).length;
     if (numOfCardsBoughtThisTurn >= numOfCardsPlayerOwns) return "You cannot play development cards on the same turn you bought them";
@@ -232,8 +232,10 @@ export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: De
     }
 
     // remove the card played from the player
-    player.devCards.splice(player.devCards.indexOf(cardToPlay));
+    player.playableDevCards.splice(player.playableDevCards.indexOf(cardToPlay));
+    player.playedDevCards.push(cardToPlay);
     gameState.devCardPlayedThisTurn = true;
+    return `Player ${player} played a ${cardToPlay}`; 
 }
 
 export function OfferTrade(gameState: GameState, initiator: Player, recipient: Player, wantResource: Resource, giveResource: Resource, wantAmount: number, giveAmount: number) {
