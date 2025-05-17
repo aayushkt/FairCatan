@@ -191,8 +191,21 @@ export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: De
                 
                 // actually play the card if we pass all the checks
                 gameState.board.robber = tile;
+                // steal 1 resource at random from the player, ignoring fractions of a resource.
+                // e.g. treat a player with 0.99 brick and 1.3 sheep the same as a player with 0 brick and 1 sheep
                 let resourcesCanSteal: Resource[] = [];
-                // TODO: FINISH THIS
+                for (const resource of Object.keys(player.resources) as Resource[]) {
+                    for (let count = 0; count < player.resources[resource]; ++count) {
+                        resourcesCanSteal.push(resource);
+                    }
+                }
+                if (resourcesCanSteal.length > 0) {
+                    shuffle(resourcesCanSteal);
+                    const stolenResource = resourcesCanSteal[0];
+                    player.resources[stolenResource] += 1;
+                    victim.resources[stolenResource] -= 1;
+                }
+                 
             } else {
                 for (const vertex of gameState.board.GetVerticesOfTile(tile)) {
                     if (gameState.board.settlements[vertex] != undefined && gameState.board.settlements[vertex] != player) return `You must steal from an opponent built on the tile you are placing the robber on`;
