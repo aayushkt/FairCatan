@@ -220,10 +220,19 @@ export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: De
 
         case DevCard.RoadBuilding:
             if (args.length == 0 || args.length > 2) return `Provide two arguments for the two road places you want to build`;
+            BuildRoad(gameState, player, args[0]);
+            BuildRoad(gameState, player, args[1]);
+            // TODO: Should handle the case where order matters. Building the first road connected to the second should be allowed.
             break;
 
         case DevCard.YearOfPlenty:
             if (args.length != 2) return `You need to select two resources to take, 0=Brick, 1=Lumber, 2=Ore, 3=Grain, 4=Wool`;
+            const resource1 = MapNumberToResource(args[0]);
+            if (resource1 == undefined) return `You need to name a resource, 0=Brick, 1=Lumber, 2=Ore, 3=Grain, 4=Wool`;
+            const resource2 = MapNumberToResource(args[1]);
+            if (resource2 == undefined) return `You need to name a resource, 0=Brick, 1=Lumber, 2=Ore, 3=Grain, 4=Wool`;
+            player.resources[resource1]++;
+            player.resources[resource2]++;
             break;
 
         case DevCard.Monopoly:
@@ -236,6 +245,17 @@ export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: De
     player.playedDevCards.push(cardToPlay);
     gameState.devCardPlayedThisTurn = true;
     return `Player ${player} played a ${cardToPlay}`; 
+}
+
+function MapNumberToResource(number: number): (Resource | undefined) {
+    switch(number) {
+        case 0: return Resource.Brick;
+        case 1: return Resource.Lumber;
+        case 2: return Resource.Ore;
+        case 3: return Resource.Grain;
+        case 4: return Resource.Wool;
+        default: return undefined
+    }
 }
 
 export function OfferTrade(gameState: GameState, initiator: Player, recipient: Player, wantResource: Resource, giveResource: Resource, wantAmount: number, giveAmount: number) {
