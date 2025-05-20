@@ -237,6 +237,15 @@ export function PlayDevCard(gameState: GameState, player: Player, cardToPlay: De
 
         case DevCard.Monopoly:
             if (args.length != 2) return `You need to name a resource, 0=Brick, 1=Lumber, 2=Ore, 3=Grain, 4=Wool`;
+            const resource = MapNumberToResource(args[0]);
+            if (resource == undefined) return `You need to name a resource, 0=Brick, 1=Lumber, 2=Ore, 3=Grain, 4=Wool`;
+            let totalResource = 0;
+            for (const p of gameState.players) {
+                // only count the whole numbers of a resource when stealing, a player with 1.3 brick will have 0.3 brick left 
+                totalResource += (p.resources[resource] - (p.resources[resource] % 1));
+                p.resources[resource] %= 1; 
+            }
+            player.resources[resource] += totalResource;
             break;
     }
 
