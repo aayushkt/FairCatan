@@ -7,6 +7,12 @@ export function UpdateStateAfterRunningAction(gameState: GameState) {
     CheckIfSomeoneWon(gameState);
     UpdateLongestRoad(gameState);
     UpdateLargestArmy(gameState);
+    RemoveImpossibleTrades(gameState);
+}
+
+// remove any trades that can no longer occuer (i.e. player A can't give wood now that he has none)
+function RemoveImpossibleTrades(gameState: GameState) {
+    gameState.activeTradeOffers = gameState.activeTradeOffers.filter(trade => trade.IsPossibleTrade());
 }
 
 function CheckIfSomeoneWon(gameState: GameState) {

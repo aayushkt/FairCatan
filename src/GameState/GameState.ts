@@ -1,6 +1,7 @@
-import { Board, Resource } from './Board';
+import { Board } from './Board';
 import { DevCard, Player } from './Player';
 import { shuffle } from '../utils';
+import { Trade } from '../GameExecution/Action';
 
 export class GameState {
     players: Player[];
@@ -12,6 +13,7 @@ export class GameState {
     largestArmy: (Player|undefined);
     cardsBoughtThisTurn: DevCard[];
     devCardPlayedThisTurn: boolean;
+    activeTradeOffers: Trade[] = [];
 
     constructor() {
         this.players = [];
