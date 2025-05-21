@@ -267,6 +267,8 @@ function MapNumberToResource(number: number): (Resource | undefined) {
     }
 }
 
+// TODO: Trades aren't limited to one resource, i.e. you can
+// have a trade that is 1 brick and 1 wood for 2 sheep, etc.
 export class Trade {
     readonly initiator: Player;
     readonly recipient: Player;
@@ -306,6 +308,7 @@ export class Trade {
     }
 }
 
+// TODO: need to implement checks to make sure that trades are only done during the either recipient's or initiatior's turn
 export function PlaceOffer(gameState: GameState, player: Player, trade: Trade): string {
     if (player != trade.initiator) return `You must be the initiator to place an offer`;
     if (!trade.IsPossibleTrade()) return `This trade is not possible as one or more players don't have the required resources`;
@@ -323,6 +326,7 @@ export function CancelOffer(gameState: GameState, player: Player, trade: Trade):
     return `Cancelled offer`;
 }
 
+// TODO: need to implement checks to make sure that trades are only done during the either recipient's or initiatior's turn
 export function AcceptOffer(gameState: GameState, player: Player, trade: Trade): string {
     if (player != trade.recipient) return `You must be the recipient to accept an offer`;
     const lenBeforeRemoving = gameState.activeTradeOffers.length;
