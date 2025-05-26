@@ -1,6 +1,37 @@
-import { Action } from './Action';
 import { GameState } from '../GameState/GameState';
 import { DevCard, Player } from '../GameState/Player';
+
+/*
+A quick list of all the actions possible:
+    - General Actions
+        - Add Player
+        - Roll dice
+        - Use harbor
+        - Bank exchange
+        - End turn
+    - Build Actions
+        - Build road
+        - Build city
+        - Build settlement
+    - Dev Card Actions
+        - Buy development card
+        - Play development card
+    - Trade Offer Actions
+        - Offer trade 
+        - Accept trade
+        - Decline trade
+*/
+
+export abstract class Action {
+
+    public Run(gameState: GameState) {
+        let resultingCommand = this.Run(gameState);
+        UpdateStateAfterRunningAction(gameState);
+    }
+
+    protected abstract RunAction(gameState: GameState): string[];
+    
+}
 
 // this function needs to run after every time an action is ran.
 export function UpdateStateAfterRunningAction(gameState: GameState) {

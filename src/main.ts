@@ -4,7 +4,7 @@
   import { Player } from './GameState/Player';
   import { Board, Resource } from './GameState/Board';
   import { GameState } from './GameState/GameState';
-  import { RollDice, AddPlayer } from './GameExecution/Action';
+  import { RollDice, AddPlayer } from './GameActions/GeneralActions';
 
   let g = new GameState();
 

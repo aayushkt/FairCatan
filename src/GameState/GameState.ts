@@ -1,7 +1,7 @@
 import { Board } from './Board';
 import { DevCard, Player } from './Player';
 import { shuffle } from '../utils';
-import { Trade } from '../GameExecution/Action';
+import { Trade } from '../GameActions/TradeOfferActions';
 
 export class GameState {
     players: Player[];
