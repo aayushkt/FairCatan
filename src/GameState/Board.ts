@@ -13,8 +13,8 @@ export class Harbor {
 
 export class Board {
 
-  static readonly NUM_VERTICES = 54;
-  static readonly NUM_ROADS = 72;
+  public static readonly NUM_VERTICES = 54;
+  public static readonly NUM_ROADS = 72;
 
   harbors: Harbor[] = []; // a desert resource represents a 3:1 harbor of any type
   tileValues: number[];
