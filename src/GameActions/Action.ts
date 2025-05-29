@@ -86,6 +86,7 @@ export function UpdateLongestRoad(gameState: GameState) {
 
 // puts roads into 'groups' which are contiguous sections of road owned by a player
 // not necessarily a straight path - e.g. three straight paths meeting at one point are a group
+// TODO: IF A PLAYER PLACES THEIR SETTLEMENT/CITY BETWEEN ROADS IT CAN BREAK THE GROUP  
 function GroupRoads(gameState: GameState): Set<Set<number>> {
     let allGroups : Set<Set<number>> = new Set<Set<number>>();
     let firstArbitraryGroup : Set<number> = new Set<number>();
