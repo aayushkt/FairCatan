@@ -86,29 +86,45 @@ export function UpdateLongestRoad(gameState: GameState) {
 
 // puts roads into 'groups' which are contiguous sections of road owned by a player
 // not necessarily a straight path - e.g. three straight paths meeting at one point are a group
-// TODO: IF A PLAYER PLACES THEIR SETTLEMENT/CITY BETWEEN ROADS IT CAN BREAK THE GROUP  
 function GroupRoads(gameState: GameState): Set<Set<number>> {
     let allGroups : Set<Set<number>> = new Set<Set<number>>();
     let firstArbitraryGroup : Set<number> = new Set<number>();
     allGroups.add(firstArbitraryGroup);
 
     for (let currRoad = 0; currRoad < Board.NUM_ROADS; ++currRoad) {
-        if (gameState.board.roads[currRoad] == undefined) continue; // if there is no road here, continue
+        const playerWhoOwnsTheRoad = gameState.board.roads[currRoad];
+        if (playerWhoOwnsTheRoad == undefined) continue; // if there is no road here, continue
 
         // first we get all the roads that are connected to this one, owned by the same player
         const allRoadsThatConnectToTheCurrRoad = new Set<number>();
         const roadEndpoints = gameState.board.GetVerticesOfRoad(currRoad);
-        for (const roadsThatConnectToOneSide of gameState.board.GetRoadsOfVertex(roadEndpoints[0])) {
+
+        // the player is blocked if another person has built a settlement or city next to the road
+        const playerIsBlockedOnOneSide = (
+            gameState.board.settlements[roadEndpoints[0]] != playerWhoOwnsTheRoad && gameState.board.settlements[roadEndpoints[0]] != undefined
+        ) || (
+            gameState.board.cities[roadEndpoints[0]] != playerWhoOwnsTheRoad && gameState.board.cities[roadEndpoints[0]] != undefined
+        );
+        // if they aren't blocked, this road belongs to the group on the other side if the player has a road there
+        if (!playerIsBlockedOnOneSide) {
+            for (const roadsThatConnectToOneSide of gameState.board.GetRoadsOfVertex(roadEndpoints[0])) {
             if (gameState.board.roads[currRoad] == gameState.board.roads[roadsThatConnectToOneSide] 
                 && currRoad != roadsThatConnectToOneSide) allRoadsThatConnectToTheCurrRoad.add(roadsThatConnectToOneSide);
+            }
         }
+        
+        // we check the same thing on the other side - note that this means the road could belong to many groups 
+        const playerIsBlockedOnOtherSide = (
+            gameState.board.settlements[roadEndpoints[1]] != playerWhoOwnsTheRoad && gameState.board.settlements[roadEndpoints[1]] != undefined
+        ) || (
+            gameState.board.cities[roadEndpoints[1]] != playerWhoOwnsTheRoad && gameState.board.cities[roadEndpoints[1]] != undefined
+        );
         for (const roadsThatConnectToTheOtherSide of gameState.board.GetRoadsOfVertex(roadEndpoints[1])) {
             if (gameState.board.roads[currRoad] == gameState.board.roads[roadsThatConnectToTheOtherSide] 
                 && currRoad != roadsThatConnectToTheOtherSide) allRoadsThatConnectToTheCurrRoad.add(roadsThatConnectToTheOtherSide);
         }
 
         // now we get all the possible groups that this road can connect to
-        // (this can be more than one)
         let allGroupsThisRoadConnects = new Set<Set<number>>();
         for (const neighbors of allRoadsThatConnectToTheCurrRoad) {
             for (const group of allGroups) {
