@@ -87,18 +87,15 @@ export function UpdateLongestRoad(gameState: GameState) {
 // puts roads into 'groups' which are contiguous sections of road owned by a player
 // not necessarily a straight path - e.g. three straight paths meeting at one point are a group
 function GroupRoads(gameState: GameState): Set<Set<number>> {
-    let allGroups : Set<Set<number>> = new Set<Set<number>>();
-    let firstArbitraryGroup : Set<number> = new Set<number>();
-    allGroups.add(firstArbitraryGroup);
+    const allGroups : Set<Set<number>> = new Set<Set<number>>();
 
     for (let currRoad = 0; currRoad < Board.NUM_ROADS; ++currRoad) {
         const playerWhoOwnsTheRoad = gameState.board.roads[currRoad];
         if (playerWhoOwnsTheRoad == undefined) continue; // if there is no road here, continue
 
-        // first we get all the roads that are connected to this one, owned by the same player
+        // get all the roads that are connected to this one, owned by the same player
         const allRoadsThatConnectToTheCurrRoad = new Set<number>();
         const roadEndpoints = gameState.board.GetVerticesOfRoad(currRoad);
-
         // the player is blocked if another person has built a settlement or city next to the road
         const playerIsBlockedOnOneSide = (
             gameState.board.settlements[roadEndpoints[0]] != playerWhoOwnsTheRoad && gameState.board.settlements[roadEndpoints[0]] != undefined
@@ -112,7 +109,6 @@ function GroupRoads(gameState: GameState): Set<Set<number>> {
                 && currRoad != roadsThatConnectToOneSide) allRoadsThatConnectToTheCurrRoad.add(roadsThatConnectToOneSide);
             }
         }
-        
         // we check the same thing on the other side - note that this means the road could belong to many groups 
         const playerIsBlockedOnOtherSide = (
             gameState.board.settlements[roadEndpoints[1]] != playerWhoOwnsTheRoad && gameState.board.settlements[roadEndpoints[1]] != undefined
@@ -124,7 +120,7 @@ function GroupRoads(gameState: GameState): Set<Set<number>> {
                 && currRoad != roadsThatConnectToTheOtherSide) allRoadsThatConnectToTheCurrRoad.add(roadsThatConnectToTheOtherSide);
         }
 
-        // now we get all the possible groups that this road can connect to
+        // now we get all the possible groups that this road can connect to since we have all the roads it connects to
         let allGroupsThisRoadConnects = new Set<Set<number>>();
         for (const neighbors of allRoadsThatConnectToTheCurrRoad) {
             for (const group of allGroups) {
@@ -149,6 +145,12 @@ function GroupRoads(gameState: GameState): Set<Set<number>> {
     }
     return allGroups;
 } 
+
+function GetLongestRoadOfGroup(group: Set<number>): number {
+    if (group.size < 3) return group.size;
+    // TODO, this is not trivial lol
+    return 0;
+}
 
 export function UpdateLargestArmy(gameState: GameState) {
     let largestArmy: number;
