@@ -1,6 +1,9 @@
 # My local reference files
 localStuff/*
 
+# the built javascript
+build/*
+
 # Logs
 logs
 *.log

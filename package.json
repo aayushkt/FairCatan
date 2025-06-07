@@ -1,7 +1,14 @@
 {
   "devDependencies": {
     "@types/node": "^22.13.9",
-    "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
+    "tsx": "^4.19.4"
+  },
+  "dependencies": {
+    "pixi.js": "^8.10.1",
+    "tsc": "^2.0.4",
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "start": "tsc"
   }
 }
